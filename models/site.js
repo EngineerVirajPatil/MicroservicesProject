@@ -1,5 +1,5 @@
-module.exports=(sequelize,DataTypes)=>{
-const site=sequelize.define("site",
+module.exports = (sequelize, DataTypes) => {
+    const site = sequelize.define('site',
     {
         name: DataTypes.STRING,
         location:DataTypes.STRING,

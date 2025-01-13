@@ -1,5 +1,5 @@
-module.exports=(DataTypes, sequelize)=>{
-    const itinerary=sequelize.define("itinerary",
+module.exports = (sequelize, DataTypes) => {
+    const itinerary = sequelize.define('itinerary',
         {
            name: DataTypes.STRING,
         },
@@ -9,7 +9,7 @@ module.exports=(DataTypes, sequelize)=>{
     )
 
 
-itinerary.asscoiate=(models)=>{
+itinerary.associate =(models)=>{
     itinerary.hasMany(models.itineraryItem,{
         foreignKey: "itineraryId",
     });

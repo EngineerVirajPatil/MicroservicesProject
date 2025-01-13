@@ -1,6 +1,6 @@
-module.exports=(DataTypes, sequelize)=>{
-const hotel=sequelize.define("hotel",
-    {
+module.exports = (sequelize, DataTypes) => {
+    const hotel = sequelize.define('hotel', 
+        {
         name: DataTypes.STRING,
         location: DataTypes.STRING,
         price_per_night: DataTypes.FLOAT,

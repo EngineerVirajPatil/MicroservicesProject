@@ -1,15 +1,15 @@
-module.exports=(sequelize, DatatTypes)=>{
-    const itineraryItem=sequelize.define("itineraryItem",
+module.exports = (sequelize, DataTypes) => {
+    const itineraryItem = sequelize.define('itineraryItem',
         {
             itineraryId:{
-              type:DatatTypes.INTEGER,
+              type:DataTypes.INTEGER,
               allowNull: false
             },
             itemId:{
-                type:DatatTypes.INTEGER,
+                type:DataTypes.INTEGER,
             },
             type:{
-                type: DatatTypes.STRING,
+                type: DataTypes.STRING,
             },
         },
         {
@@ -18,7 +18,7 @@ module.exports=(sequelize, DatatTypes)=>{
     )
 
 
-    itineraryItem.associate=(models)=>{
+    itineraryItem.associate =(models)=>{
         itineraryItem.belongsTo(models.itinerary,
             {
                 foreignKey:"itineraryId",
