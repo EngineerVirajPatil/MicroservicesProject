@@ -1,13 +1,17 @@
 const { flight: flightModel, hotel: hotelModel, itinerary: itineraryModel, itineraryItem: itineraryItemModel, site: siteModel } = require("../models");
+const { validateFlightByQuery, validateItineraryByQuery } = require('../validations/validation.js');
+
+
 
 const createItinerary = async (req, res) => {
     const { flights, hotels, sites, name } = req.body;
+    const errors=validateItineraryByQuery(flights, hotels, sites, name);
+    if(errors && errors.length>0){
+        return res.json({errors: errors});
+        }
     try {
         if (name && name.trim().length > 0) {
-            // Create the itinerary
             const newItinerary = await itineraryModel.create({ name });
-
-            // Add flights to the itinerary
             if (flights && flights.length > 0) {
                 for (const flight of flights) {
                     const savedFlight = await flightModel.create(flight);
@@ -19,7 +23,7 @@ const createItinerary = async (req, res) => {
                 }
             }
 
-            // Add hotels to the itinerary
+
             if (hotels && hotels.length > 0) {
                 for (const hotel of hotels) {
                     const savedHotel = await hotelModel.create(hotel);
@@ -31,7 +35,6 @@ const createItinerary = async (req, res) => {
                 }
             }
 
-            // Add sites to the itinerary
             if (sites && sites.length > 0) {
                 for (const site of sites) {
                     const savedSite = await siteModel.create(site);
@@ -48,7 +51,15 @@ const createItinerary = async (req, res) => {
             res.status(400).json({ error: "Name is required to create an itinerary." });
         }
     } catch (error) {
-        console.error(error);
+
+        if (error.response.status === 429) {
+            return res.status(429).json({ error: "Rate Limit exceeded. Please try again later." });
+        }
+        else if (error.response.status === 500 && error.response.data.error === 'Simulated error for testing purposes.') {
+            return res.status(500).json({ error: 'Simulated error for testing purposes.' });
+        }
+        res.status(500).json({ error: 'Failed to create Itinerary' });
+
         res.status(500).json({ error: "Failed to create Itinerary" });
     }
 };
@@ -83,7 +94,15 @@ const getItinerary = async (req, res) => {
 
         res.status(200).json({ itinerary: newItinerary, flights: allFlights, hotels: allHotels, sites: allSites });
     } catch (error) {
-        console.error(error);
+
+        if (error.response.status === 429) {
+            return res.status(429).json({ error: "Rate Limit exceeded. Please try again later." });
+        }
+        else if (error.response.status === 500 && error.response.data.error === 'Simulated error for testing purposes.') {
+            return res.status(500).json({ error: 'Simulated error for testing purposes.' });
+        }
+        res.status(500).json({ error: 'Error in fetching Itinerary' });
+
         res.status(500).json({ message: "Error in fetching Itinerary" });
     }
 };
