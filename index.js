@@ -11,10 +11,10 @@ const { sequelize } = require("./models");
 const { validateFlightByQuery, validateItineraryByQuery } = require('./validations/validation.js'); 
 
 
-axiosInstance
+/* axiosInstance
     .get("/health")
     .then((response) => console.log(response.data))
-    .catch((error) => console.error("Error in fetching the axios health:", error));
+    .catch((error) => console.error("Error in fetching the axios health:", error)); */
 
 const getFlightsByDetails = async (req, res) => {
     const origin=req.query.origin;
@@ -55,3 +55,5 @@ sequelize.authenticate()
 app.listen(3000, ()=>{
     console.log("Server is running on port 3000");
 })
+
+module.exports= getFlightsByDetails;

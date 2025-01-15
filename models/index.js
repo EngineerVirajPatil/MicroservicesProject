@@ -9,20 +9,22 @@ const env = process.env.NODE_ENV || 'development';
 const config = require(__dirname + '/../config/config.js')[env];
 const db = {};
 
-let sequelize;
-if (config.use_env_variable) {
-  sequelize = new Sequelize(process.env[config.use_env_variable], config);
-} else {
-  sequelize = new Sequelize(config.database, config.username, config.password, config,
-    {
-      host:config.host,
-      dialect:"postgres",
-      port:config.port,
-    }
-  );
+if (!config) {
+  throw new Error(`Configuration for environment '${env}' is missing`);
 }
 
+console.log("Loaded Config:", config);
 
+let sequelize;
+if (config.use_env_variable && process.env[config.use_env_variable]) {
+  sequelize = new Sequelize(process.env[config.use_env_variable], config);
+} else {
+  sequelize = new Sequelize(config.database, config.username, config.password, {
+    host: config.host,
+    dialect: config.dialect,
+    port: config.port,
+  });
+}
 
 fs.readdirSync(__dirname)
   .filter((file) => {
